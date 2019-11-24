@@ -1,3 +1,3 @@
 # tictactoe
-This was created for a bagrut project
+This tictac toe was created for a bagrut project
 Enjoy
