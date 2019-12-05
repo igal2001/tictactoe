@@ -175,7 +175,14 @@ namespace XO
                 }
             }
 
-            gl.CheckWinCond();
+            if(gl.CheckWinCond() == 1)
+            {
+                Toast.MakeText(Application.Context, "Player 1 wins", ToastLength.Long).Show();
+            }
+            else if (gl.CheckWinCond() == 2)
+            {
+                Toast.MakeText(Application.Context, "Player 2 wins", ToastLength.Long).Show();
+            }
             gl.ChangeTurn();
         }
     }

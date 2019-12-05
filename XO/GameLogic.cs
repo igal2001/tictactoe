@@ -14,21 +14,20 @@ namespace XO
 {
     class GameLogic
     {
-        int[,] gameBoard = new int[3, 3]; //{ {1, 0, 0}, {0, 1, 0 }, { 0, 0, 1 } }; //The Game board
-        public int turn; // X - 1 O - 2
-        public bool won;
-        string debug;
+        int[,] gameBoard;
+        //public int turn; // X - 1 O - 2
         int winner;
+        int step;
 
-        public void Start()
+        public GameLogic()
         {
-            turn = 1; //X starts
-            won = false;
-            InitBoard();
+            this.gameBoard = new int[3, 3];
         }
 
-        private void InitBoard()
+        public void InitBoard()
         {
+            step = 0;
+            winner = -1;
             for (int x = 0; x < gameBoard.GetLength(0); x++) //Go over x
             {
                 for (int y = 0; y < gameBoard.GetLength(0); y++) //Go over y
@@ -38,21 +37,18 @@ namespace XO
             }
         }
 
-        public void GetPos(int pos)
+        public void GetPos(int pos, int turn)
         {
          //   Toast.MakeText(context, pos + "", ToastLength.Short).Show();
             int first = pos / 10; //Get row
             int second = pos % 10; //Get column
 
-
-
-            if (turn == 1)
-                gameBoard[first, second] = 1;
-            else if (turn == 2)
-                gameBoard[first, second] = 2;
+            gameBoard[first, second] = turn;
+            step++;
         }
 
-        void CheckDig()
+        #region Checks
+        bool CheckDig()
         {
             ////Diagonal left
             //int num = gameBoard[0, 0];
@@ -75,11 +71,12 @@ namespace XO
             if(gameBoard[0,0] == gameBoard[1,1] && gameBoard[2,2] == gameBoard[1,1])
             {
                 winner = gameBoard[0, 0];
-                won = true;
+                return true;
             }
+            return false;
         }
 
-        void CheckDigRight()
+        bool CheckDigRight()
         {
             //int num = gameBoard[0, 2];
             //int j = 1;
@@ -106,11 +103,12 @@ namespace XO
             if(gameBoard[0,2] == gameBoard[1,1] && gameBoard[2,0] == gameBoard[1,1])
             {
                 winner = gameBoard[0, 2];
-                won = true;
+                return true;
             }
+            return false;
         }
 
-        void CheckVertical()
+        bool CheckVertical()
         {
             bool brak = false;
 
@@ -126,14 +124,15 @@ namespace XO
                 if (brak != true && (gameBoard[i, 0] == gameBoard[i, 1]) && (gameBoard[i, 1] == gameBoard[i, 2]))
                 {
                     winner = gameBoard[i, 0];
-                    won = true;
+                    return true;
                 }
 
 
             }
+            return false;
         }
 
-        void CheckHorizontal()
+        bool CheckHorizontal()
         {
             bool brak;
             //Horizontal
@@ -149,50 +148,32 @@ namespace XO
                 if (brak != true && (gameBoard[0, i] == gameBoard[1, i]) && (gameBoard[1, i] == gameBoard[2, i]))
                 {
                     winner = gameBoard[0, i];
-                    won = true;
+                    return true;
                 }
 
 
             }
+            return false;
         }
-        public void CheckWinCond()
+        #endregion
+
+        public bool CheckWinCond()
         {
-            CheckDig();
-            CheckDigRight();
-            CheckVertical();
-            CheckHorizontal();
+            bool gameOver = false;
+            gameOver = CheckDig();
+            if(gameOver == false)
+                gameOver = CheckDigRight();
+            if(gameOver == false)
+                gameOver = CheckVertical();
+            if(gameOver == false)
+                gameOver = CheckHorizontal();
 
-            //if(won == true)
-            //{
-            //    debug = "won true";
-            //}
-            //else if(won == false)
-            //{
-            //    debug = "won false";
-            //}
-
-            //Toast.MakeText(Application.Context, debug, ToastLength.Short).Show();
-
-            if(won)
-            {
-                if (turn == 1)
-                {
-                    Toast.MakeText(Application.Context, "Player 1 wins", ToastLength.Long).Show();
-                }
-                else if (turn == 2)
-                {
-                    Toast.MakeText(Application.Context, "Player 2 wins", ToastLength.Long).Show();
-                }
-            }
-            
+            return gameOver;          
         }
 
-        public void ChangeTurn()
+        public int GetWinner()
         {
-            if (turn == 1)
-                turn = 2;
-            else if (turn == 2)
-                turn = 1;
+            return winner;
         }
     }
 }

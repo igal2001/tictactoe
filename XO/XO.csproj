@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AllActivity.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="InputActivity.cs" />
     <Compile Include="Instruction.cs" />
     <Compile Include="GameBoard.cs" />
